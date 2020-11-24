@@ -15,9 +15,11 @@ $ chromedriver --version
 
 ```
 from selenium import webdriver
-# Initialize the driver
+
+# initialize the driver
 driver = webdriver.Chrome()
-# Open provided link in a browser window using the driver
+
+# open provided link in a browser window using the driver
 driver.get("https://google.com")
 ```
 
