@@ -10,6 +10,7 @@ $ scrapy runspider --nolog npr.py
 ```
 $ pip3 install selenium
 $ brew cask install chromedriver
+$ chromedriver --version
 ```
 
 ```
