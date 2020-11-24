@@ -7,6 +7,19 @@ $ scrapy genspider npg www.npg.org.uk
 $ scrapy runspider --nolog npr.py
 ```
 
+```
+$ pip3 install selenium
+$ brew cask install chromedriver
+```
+
+```
+from selenium import webdriver
+# Initialize the driver
+driver = webdriver.Chrome()
+# Open provided link in a browser window using the driver
+driver.get("https://google.com")
+```
+
 ## References
 * https://scrapy.org/
 * https://docs.scrapy.org/en/latest/topics/item-pipeline.html
