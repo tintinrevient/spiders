@@ -4,7 +4,7 @@
 $ scrapy startproject spiders
 $ cd spiders
 $ scrapy genspider npg www.npg.org.uk
-$ scrapy runspider npg.py
+$ scrapy runspider --nolog npr.py
 ```
 
 ## References
