@@ -1,5 +1,7 @@
 # Spiders
 
+## Code
+
 ```
 $ scrapy startproject spiders
 $ cd spiders
@@ -22,6 +24,13 @@ driver = webdriver.Chrome()
 # open provided link in a browser window using the driver
 driver.get("https://google.com")
 ```
+
+## Steps
+
+<p float="left">
+	<img src="./pix/images/image_downloader.png" width=800 />
+</p>
+
 
 ## References
 * https://scrapy.org/
