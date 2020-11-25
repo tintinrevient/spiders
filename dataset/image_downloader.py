@@ -14,6 +14,13 @@ from time import time
 import pyautogui
 import pyperclip
 
+def csv_writer(data, outfile):
+    with open(outfile, 'w', encoding='utf-8') as csv_fh:
+        csv_writer = csv.writer(csv_fh, delimiter=';')
+        for line in data:
+            csv_writer.writerow(line)
+
+
 def convert_file(infile, outfile):
 
     data = []
@@ -48,10 +55,8 @@ def convert_file(infile, outfile):
                 except ValueError:
                     pass
 
-    with open(outfile, 'w', encoding='utf-8') as csv_fh:
-        csv_writer = csv.writer(csv_fh, delimiter=';')
-        for line in data:
-            csv_writer.writerow(line)
+    # write the csv
+    csv_writer(data, outfile)
 
 
 def img_downloader(infile, outfile):
@@ -71,9 +76,14 @@ def img_downloader(infile, outfile):
         lines = fh.readlines()
 
         for line in lines:
+
+            print("Processing...")
             # print line number
             line_num += 1
-            print(line_num)
+            print(line, line_num)
+
+            if line_num < 837:
+                continue
 
             # split
             values = line.split(';')
@@ -85,7 +95,7 @@ def img_downloader(infile, outfile):
             print(url)
 
             # only filter in specific years: 1500, 1600, 1700
-            if year >= 1600 and year < 1700:
+            if year >= 1700 and year < 1800:
 
                 try:
                     # open provided link in a browser window using the driver
@@ -115,22 +125,19 @@ def img_downloader(infile, outfile):
                         sleep(1)
 
                         # finally update the data
+                        print("Storing...")
                         print(name, year, profession, img_filename)
                         data.append([name, year, profession, img_filename])
 
                 finally:
-                    with open(outfile, 'w', encoding='utf-8') as csv_fh:
-                        csv_writer = csv.writer(csv_fh, delimiter=';')
-                        for line in data:
-                            csv_writer.writerow(line)
+                    # write the csv
+                    csv_writer(data, outfile)
 
     # close the driver
     driver.close()
 
-    with open(outfile, 'w', encoding='utf-8') as csv_fh:
-        csv_writer = csv.writer(csv_fh, delimiter=';')
-        for line in data:
-            csv_writer.writerow(line)
+    # write the csv
+    csv_writer(data, outfile)
 
     end_time = time()
     print("Duration:", (end_time-start_time)/3600, "hours")
@@ -141,7 +148,7 @@ if __name__ == "__main__":
     # pre-process items.json
     # input: items.json
     # output: items.csv
-    convert_file('items.json', 'items.csv')
+    # convert_file('items.json', 'items.csv')
 
     # download all the images
-    # img_downloader('items.csv', 'images_1600.csv')
+    img_downloader('items.csv', 'images_1700_1.csv')
