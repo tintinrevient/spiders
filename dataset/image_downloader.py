@@ -80,9 +80,9 @@ def img_downloader(infile, outfile):
             print("Processing...")
             # print line number
             line_num += 1
-            print(line, line_num)
+            print("Row:", line_num)
 
-            if line_num < 837:
+            if line_num <= 13433:
                 continue
 
             # split
@@ -92,7 +92,7 @@ def img_downloader(infile, outfile):
             year = int(values[1])
             profession = values[2]
             url = values[3]
-            print(url)
+            print("URL:", url)
 
             # only filter in specific years: 1500, 1600, 1700
             if year >= 1700 and year < 1800:
@@ -126,7 +126,7 @@ def img_downloader(infile, outfile):
 
                         # finally update the data
                         print("Storing...")
-                        print(name, year, profession, img_filename)
+                        print("Row:", name, year, profession, img_filename)
                         data.append([name, year, profession, img_filename])
 
                 finally:
@@ -151,4 +151,4 @@ if __name__ == "__main__":
     # convert_file('items.json', 'items.csv')
 
     # download all the images
-    img_downloader('items.csv', 'images_1700_1.csv')
+    img_downloader('items.csv', 'images_1700_2.csv')
