@@ -9,5 +9,5 @@ import scrapy
 class SpidersItem(scrapy.Item):
     # define the fields for your item here like:
     name = scrapy.Field()
-    intro = scrapy.Field()
+    desp = scrapy.Field()
     url = scrapy.Field()

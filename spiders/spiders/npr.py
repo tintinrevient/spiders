@@ -2,11 +2,15 @@ import scrapy
 import string
 import json
 import urllib
+import re
 
 # scrapy startproject spiders
 # cd spiders
 # scrapy genspider example example.com
 # scrapy runspider example.py
+
+# https://www.npg.org.uk/collections/search/use-this-image/?mkey=mw05305
+# https://www.npg.org.uk/collections/search/sita-z/?index=a
 
 class NprSpider(scrapy.Spider):
 
@@ -33,10 +37,10 @@ class NprSpider(scrapy.Spider):
     	for sitter in response.css('#eventsListing p'):
 
     		info = sitter.css('::text').extract()
-    		
+
     		yield {
     			'name': info[0],
-    			'intro': info[1],
+                'desp': info[1],
     			'url': base_url + sitter.css('a ::attr(href)').extract_first()
     		}
 
