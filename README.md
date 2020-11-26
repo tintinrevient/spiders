@@ -6,7 +6,7 @@
 $ scrapy startproject spiders
 $ cd spiders
 $ scrapy genspider npg www.npg.org.uk
-$ scrapy runspider --nolog npr.py
+$ scrapy runspider --nolog npg.py
 ```
 
 ```

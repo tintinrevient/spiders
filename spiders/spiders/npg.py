@@ -14,7 +14,7 @@ import re
 
 class NprSpider(scrapy.Spider):
 
-    name = 'npr'
+    name = 'npg'
     allowed_domains = ['www.npg.org.uk']
     start_urls = ['https://www.npg.org.uk/collections/search/sita-z/']
 

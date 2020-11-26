@@ -77,10 +77,9 @@ def img_downloader(avg_year, skip_lines, infile, outfile):
 
         for line in lines:
 
-            print("Processing...")
             # print line number
             line_num += 1
-            print("Row:", line_num)
+            print("Processing", line_num)
 
             if line_num <= skip_lines:
                 continue
@@ -92,7 +91,7 @@ def img_downloader(avg_year, skip_lines, infile, outfile):
             year = int(values[1])
             profession = values[2]
             url = values[3]
-            print("URL:", url)
+            print("Processing", url)
 
             # only filter in specific years: 1500, 1600, 1700
             if year == avg_year:
@@ -125,8 +124,7 @@ def img_downloader(avg_year, skip_lines, infile, outfile):
                         sleep(1)
 
                         # finally update the data
-                        print("Storing...")
-                        print("Row:", name, year, profession, img_filename)
+                        print("Storing", name, year, profession, img_filename)
                         data.append([name, year, profession, img_filename])
 
                 finally:
