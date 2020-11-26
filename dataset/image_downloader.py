@@ -59,7 +59,7 @@ def convert_file(infile, outfile):
     csv_writer(data, outfile)
 
 
-def img_downloader(infile, outfile):
+def img_downloader(avg_year, skip_lines, infile, outfile):
 
     start_time = time()
 
@@ -82,7 +82,7 @@ def img_downloader(infile, outfile):
             line_num += 1
             print("Row:", line_num)
 
-            if line_num <= 13433:
+            if line_num <= skip_lines:
                 continue
 
             # split
@@ -95,7 +95,7 @@ def img_downloader(infile, outfile):
             print("URL:", url)
 
             # only filter in specific years: 1500, 1600, 1700
-            if year >= 1700 and year < 1800:
+            if year == avg_year:
 
                 try:
                     # open provided link in a browser window using the driver
@@ -148,7 +148,7 @@ if __name__ == "__main__":
     # pre-process items.json
     # input: items.json
     # output: items.csv
-    # convert_file('items.json', 'items.csv')
+    # convert_file(infile='items.json', outfile='items.csv')
 
     # download all the images
-    img_downloader('items.csv', 'images_1700_2.csv')
+    img_downloader(avg_year=1700, skip_lines=0, infile='items.csv', outfile='images_1700.csv')
