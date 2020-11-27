@@ -28,6 +28,10 @@ driver.get("https://google.com")
 ## Steps
 
 <p float="left">
+	<img src="./pix/spiders.png" width=800 />
+</p>
+
+<p float="left">
 	<img src="./pix/image_downloader.png" width=800 />
 </p>
 
