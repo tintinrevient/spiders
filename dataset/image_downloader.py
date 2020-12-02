@@ -100,17 +100,30 @@ def img_downloader(avg_year, skip_lines, infile, outfile):
                     # open provided link in a browser window using the driver
                     driver.get(url)
 
-                    # find image filename
-                    img_src = driver.find_element_by_css_selector('.image a img').get_attribute("src")
-                    img_filename = img_src.split('/')[-2] + ".jpg"
+                    # find the description
+                    img_desp = WebDriverWait(driver, 10).until(
+                        EC.visibility_of_element_located((By.CSS_SELECTOR, 'p.objectDescription'))
+                    )
+                    description = img_desp.text
 
-                    # filter out abnormal image filenames
-                    if img_filename.startswith('mw'):
+                    # find the image
+                    img_src_list = WebDriverWait(driver, 10).until(
+                        EC.visibility_of_all_elements_located((By.CSS_SELECTOR, '.eventsItem .image a img'))
+                    )
+                    # get the image filename
+                    img_filename_list = [img_src.get_attribute('src').split('/')[-2] + ".jpg" for img_src in img_src_list]
 
-                        # find the element
-                        img_link = WebDriverWait(driver, 10).until(
-                            EC.visibility_of_element_located((By.CSS_SELECTOR, ".image a"))
-                        )
+                    # find the link
+                    img_link_list = WebDriverWait(driver, 10).until(
+                        EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".eventsItem .image a"))
+                    )
+
+                    # if there are multiple images for one person
+                    for img_filename, img_link in zip(img_filename_list, img_link_list):
+
+                        # filter out abnormal image filenames
+                        if not img_filename.startswith('mw'):
+                            continue
 
                         # right click
                         ActionChains(driver).context_click(img_link).perform()
@@ -123,9 +136,9 @@ def img_downloader(avg_year, skip_lines, infile, outfile):
                         pyautogui.press('enter')
                         sleep(1)
 
-                        # finally update the data
-                        print("Storing", name, year, profession, img_filename)
-                        data.append([name, year, profession, img_filename])
+                    # finally update the data
+                    print("Storing", name, year, profession, img_filename_list, description)
+                    data.append([name, year, profession, img_filename_list, description])
 
                 finally:
                     # write the csv
@@ -149,4 +162,4 @@ if __name__ == "__main__":
     # convert_file(infile='items.json', outfile='items.csv')
 
     # download all the images
-    img_downloader(avg_year=1700, skip_lines=0, infile='items.csv', outfile='images_1700.csv')
+    img_downloader(avg_year=1500, skip_lines=0, infile='items.csv', outfile='images_1500_1.csv')
