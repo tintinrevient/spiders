@@ -226,16 +226,22 @@ def prepare_dataset(avg_year, infile, outfile):
 
 if __name__ == "__main__":
 
+    data_dir_name = 'data'
+
     # Step 1
     # pre-process items.json
     # input: items.json
     # output: items.csv
-    # convert_file(infile='items.json', outfile='items.csv')
+    # convert_file(infile=os.path.join(data_dir_name, 'items.json'), outfile=os.path.join(data_dir_name, 'items.csv'))
 
     # Step 2
     # download all the images
-    img_downloader(avg_year=1600, skip_lines=0, infile='items.csv', outfile='images_1600_raw.csv')
+    img_downloader(avg_year=1600, skip_lines=0,
+                   infile=os.path.join(data_dir_name, 'items.csv'),
+                   outfile=os.path.join(data_dir_name, 'images_1600_raw.csv'))
 
     # Step 3
     # prepare the dataset
-    # prepare_dataset(avg_year=1600, infile='images_1600_raw.csv', outfile='images_1600.csv')
+    # prepare_dataset(avg_year=1600,
+    #                 infile=os.path.join(data_dir_name, 'images_1600_raw.csv'),
+    #                 outfile=os.path.join(data_dir_name, 'images_1600.csv'))
