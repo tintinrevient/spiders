@@ -16,15 +16,16 @@ from time import time
 import pyautogui
 import pyperclip
 
-def csv_writer(data, outfile):
-    with open(outfile, 'w', encoding='utf-8') as csv_fh:
+def csv_writer(data, outfile, append=False):
+    mode = 'a' if append else 'w'
+    with open(outfile, mode, encoding='utf-8') as csv_fh:
         csv_writer = csv.writer(csv_fh, delimiter=';')
         for row in data:
             csv_writer.writerow(row)
 
 
 def csv_reader(infile):
-    with open(infile, 'r', encoding='utf-8') as csv_fh:
+    with open(infile, mode='r', encoding='utf-8') as csv_fh:
         csv_reader = csv.reader(csv_fh, delimiter=';')
         row_list = []
         for row in csv_reader:
@@ -70,7 +71,7 @@ def convert_file(infile, outfile):
     csv_writer(data, outfile)
 
 
-def img_downloader(avg_year, skip_lines, infile, outfile):
+def img_downloader(avg_year, skip_lines, infile, outfile, append):
 
     start_time = time()
 
@@ -112,10 +113,11 @@ def img_downloader(avg_year, skip_lines, infile, outfile):
                     driver.get(url)
 
                     # find the description
-                    img_desp = WebDriverWait(driver, 10).until(
-                        EC.visibility_of_element_located((By.CSS_SELECTOR, 'p.objectDescription'))
+                    img_desp_list = WebDriverWait(driver, 10).until(
+                        EC.visibility_of_all_elements_located((By.CSS_SELECTOR, 'p.objectDescription'))
                     )
-                    img_desp_text = img_desp.text
+                    delimiter = "\n"
+                    img_desp_text = delimiter.join([img_desp.text for img_desp in img_desp_list])
 
                     # find the image
                     img_src_list = WebDriverWait(driver, 10).until(
@@ -153,13 +155,14 @@ def img_downloader(avg_year, skip_lines, infile, outfile):
 
                 finally:
                     # write the csv
-                    csv_writer(data, outfile)
+                    csv_writer(data, outfile, append=append)
+
 
     # close the driver
     driver.close()
 
     # write the csv
-    csv_writer(data, outfile)
+    csv_writer(data, outfile, append=append)
 
     end_time = time()
     print("Duration:", (end_time-start_time)/3600, "hours")
@@ -212,11 +215,9 @@ def prepare_dataset(avg_year, infile, outfile):
         img_filename_list_refined = list(set(img_filename_list_refined))
 
         # extract the valid description
-        img_desp = row[4].split('\n')
-        if len(img_desp) > 1:
-            description = img_desp[1]
-        else:
-            description = ''
+        img_desp_list = row[4].split('\n')
+        delimiter = ". "
+        description = delimiter.join(img_desp_list)
 
         data.append([row[0], row[1], row[2], img_filename_list_refined, description])
 
@@ -237,10 +238,13 @@ if __name__ == "__main__":
     # Step 2
     # download all the images
     avg_year = 1700
+    skip_lines = 3053
+    append = True
     img_downloader(avg_year=avg_year,
-                   skip_lines=0,
+                   skip_lines=skip_lines,
                    infile=os.path.join(data_dir_name, 'items.csv'),
-                   outfile=os.path.join(data_dir_name, 'images_' + str(avg_year) + '_raw.csv'))
+                   outfile=os.path.join(data_dir_name, 'images_' + str(avg_year) + '_raw.csv'),
+                   append=append)
 
     # Step 3
     # prepare the dataset
