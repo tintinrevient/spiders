@@ -236,12 +236,15 @@ if __name__ == "__main__":
 
     # Step 2
     # download all the images
-    img_downloader(avg_year=1600, skip_lines=0,
+    avg_year = 1700
+    img_downloader(avg_year=avg_year,
+                   skip_lines=0,
                    infile=os.path.join(data_dir_name, 'items.csv'),
-                   outfile=os.path.join(data_dir_name, 'images_1600_raw.csv'))
+                   outfile=os.path.join(data_dir_name, 'images_' + str(avg_year) + '_raw.csv'))
 
     # Step 3
     # prepare the dataset
-    # prepare_dataset(avg_year=1600,
-    #                 infile=os.path.join(data_dir_name, 'images_1600_raw.csv'),
-    #                 outfile=os.path.join(data_dir_name, 'images_1600.csv'))
+    # avg_year = 1700
+    # prepare_dataset(avg_year=avg_year,
+    #                 infile=os.path.join(data_dir_name, 'images_' + str(avg_year) + '_raw.csv'),
+    #                 outfile=os.path.join(data_dir_name, 'images_' + str(avg_year) + '.csv'))
