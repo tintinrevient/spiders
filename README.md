@@ -45,3 +45,4 @@ driver.get("https://google.com")
 * https://stackoverflow.com/questions/43922562/scrapy-how-to-use-items-in-spider-and-how-to-send-items-to-pipelines
 * https://selenium-python.readthedocs.io/getting-started.html
 * https://www.npg.org.uk/research/programmes/making-art-in-tudor-britain/matbsearch
+* https://www.tensorflow.org/guide/eager#computing_gradients

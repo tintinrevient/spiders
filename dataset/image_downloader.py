@@ -1,3 +1,5 @@
+import os
+import shutil
 import json
 import csv
 import re
@@ -17,8 +19,17 @@ import pyperclip
 def csv_writer(data, outfile):
     with open(outfile, 'w', encoding='utf-8') as csv_fh:
         csv_writer = csv.writer(csv_fh, delimiter=';')
-        for line in data:
-            csv_writer.writerow(line)
+        for row in data:
+            csv_writer.writerow(row)
+
+
+def csv_reader(infile):
+    with open(infile, 'r', encoding='utf-8') as csv_fh:
+        csv_reader = csv.reader(csv_fh, delimiter=';')
+        row_list = []
+        for row in csv_reader:
+            row_list.append(row)
+    return row_list
 
 
 def convert_file(infile, outfile):
@@ -104,7 +115,7 @@ def img_downloader(avg_year, skip_lines, infile, outfile):
                     img_desp = WebDriverWait(driver, 10).until(
                         EC.visibility_of_element_located((By.CSS_SELECTOR, 'p.objectDescription'))
                     )
-                    description = img_desp.text
+                    img_desp_text = img_desp.text
 
                     # find the image
                     img_src_list = WebDriverWait(driver, 10).until(
@@ -137,8 +148,8 @@ def img_downloader(avg_year, skip_lines, infile, outfile):
                         sleep(1)
 
                     # finally update the data
-                    print("Storing", name, year, profession, img_filename_list, description)
-                    data.append([name, year, profession, img_filename_list, description])
+                    print("Storing", name, year, profession, img_filename_list, img_desp_text)
+                    data.append([name, year, profession, img_filename_list, img_desp_text])
 
                 finally:
                     # write the csv
@@ -154,12 +165,77 @@ def img_downloader(avg_year, skip_lines, infile, outfile):
     print("Duration:", (end_time-start_time)/3600, "hours")
 
 
+def prepare_dataset(avg_year, infile, outfile):
+
+    data = []
+
+    row_list = csv_reader(infile)
+
+    for row in row_list:
+        # move images into the directory for each century
+        img_filename_list = row[3].strip('][').split(',')
+
+        # create the directory for the century if it does not exist
+        dst_dir = os.path.join('images', str(avg_year))
+        if not os.path.exists(dst_dir):
+            os.mkdir(dst_dir)
+
+        src_dir = os.path.join('images')
+
+        img_filename_list_refined = []
+
+        # refine the image filename list
+        for img_filename in img_filename_list:
+            # remove leading and ending spaces, and '
+            img_filename = img_filename.strip().strip("'")
+
+            # remove duplicate image files, e.g. 'mw01153 (1).jpg'
+            match_obj = re.match(r'(mw\d+)\s*(\(\d+\)).jpg', img_filename, re.M | re.I)
+
+            if match_obj:
+                img_filename = str(match_obj[1]) + ".jpg"
+
+            src_img_filename = os.path.join(src_dir, img_filename)
+            dst_img_filename = os.path.join(dst_dir, img_filename)
+
+            # move the files
+            if os.path.exists(src_img_filename):
+                print('Remove from', src_img_filename, 'to', dst_img_filename)
+                shutil.copyfile(src_img_filename, dst_img_filename)
+                # delete the source files
+                os.remove(src_img_filename)
+
+            # update the files
+            img_filename_list_refined.append(img_filename)
+
+        # remove the duplicate files
+        img_filename_list_refined = list(set(img_filename_list_refined))
+
+        # extract the valid description
+        img_desp = row[4].split('\n')
+        if len(img_desp) > 1:
+            description = img_desp[1]
+        else:
+            description = ''
+
+        data.append([row[0], row[1], row[2], img_filename_list_refined, description])
+
+    # write the csv
+    csv_writer(data, outfile)
+
+
 if __name__ == "__main__":
 
+    # Step 1
     # pre-process items.json
     # input: items.json
     # output: items.csv
     # convert_file(infile='items.json', outfile='items.csv')
 
+    # Step 2
     # download all the images
-    img_downloader(avg_year=1500, skip_lines=0, infile='items.csv', outfile='images_1500_1.csv')
+    img_downloader(avg_year=1600, skip_lines=0, infile='items.csv', outfile='images_1600_raw.csv')
+
+    # Step 3
+    # prepare the dataset
+    # prepare_dataset(avg_year=1600, infile='images_1600_raw.csv', outfile='images_1600.csv')
