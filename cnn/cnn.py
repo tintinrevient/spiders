@@ -167,9 +167,9 @@ def predict(avg_year, img_filename):
 if __name__ == "__main__":
 
     # train the model
-    train()
+    # train()
 
     # predict the label given the image index
-    # predict(16860) # 83% eyewear
-    # predict(22256) # 60% shoes
-    # predict(49764) # 100% bottomwear
+    predict(1500, 'mw00001.jpg') # 60% 1700
+    # predict(1600, 'mw00040.jpg') # 60% 1700
+    # predict(1700, 'mw00006.jpg') # 100% bottomwear
