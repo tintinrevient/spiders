@@ -26,5 +26,5 @@
 
 <p float="left">
 	<img src="./pix/heatmap_mw00001_local.png" width=350 />
-	<img src="./pix/heatmap_mw00001.png" width=350 />
+	<img src="./pix/heatmap_mw00001.jpg" width=350 />
 </p>
