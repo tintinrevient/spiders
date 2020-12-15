@@ -265,4 +265,3 @@ if __name__ == "__main__":
 
     # visualize heatmap
     visualize_heatmap('1500', 'mw00001.jpg', 'conv2d_1', 128, True)
-
