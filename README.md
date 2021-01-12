@@ -11,7 +11,7 @@ $ scrapy runspider --nolog npg.py
 
 ```
 $ scrapy runspider --nolog npg.py
-the above command can be replaced with the command below:
+# the above command can be replaced with the command below:
 $ scrapy crawl npg
 ```
 
