@@ -10,6 +10,14 @@ $ scrapy runspider --nolog npg.py
 ```
 
 ```
+$ scrapy runspider --nolog npg.py
+
+the above code can be replaced with the command below:
+
+$ scrapy crawl npg
+```
+
+```
 $ pip3 install selenium
 $ brew cask install chromedriver
 $ chromedriver --version
